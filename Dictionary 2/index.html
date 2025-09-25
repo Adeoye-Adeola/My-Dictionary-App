@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WordNest Dictionary</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>WordNest Dictionary</h1>
+
+    <div class="search-box">
+      <input id="wordInput" type="text" placeholder="Type a word…" autocomplete="off">
+      <button onclick="searchWord()">Search</button>
+    </div>
+
+    <div id="errorMsg" class="error"></div>
+    <div id="definitions" class="definitions"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

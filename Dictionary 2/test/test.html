@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Quick WordNest Test</title>
+<style>
+body {font-family: sans-serif; padding:20px;}
+#errorMsg {color: red;}
+</style>
+</head>
+<body>
+<h1>WordNest Test</h1>
+<input id="wordInput" placeholder="Type a word">
+<button onclick="searchWord()">Search</button>
+<div id="errorMsg"></div>
+<div id="definitions"></div>
+
+<script>
+async function searchWord(){
+  const word = document.getElementById("wordInput").value.trim();
+  const defs = document.getElementById("definitions");
+  const errorBox = document.getElementById("errorMsg");
+  defs.innerHTML = ""; errorBox.textContent = "";
+
+  if(!word){errorBox.textContent="Please enter a word.";return;}
+
+  if(!navigator.onLine){errorBox.textContent="No network.";return;}
+
+  try {
+    const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
+    if(!res.ok) throw new Error("Word not found.");
+    const data = await res.json();
+    let out="";
+    data[0].meanings.slice(0,2).forEach(m=>{
+      out += `<h4>${m.partOfSpeech}</h4>`;
+      m.definitions.slice(0,1).forEach(d=>{
+        out += `<p>${d.definition}</p>`;
+        if(d.synonyms?.length) out += `<strong>Synonyms:</strong> ${d.synonyms.join(", ")}<br>`;
+        if(d.antonyms?.length) out += `<strong>Antonyms:</strong> ${d.antonyms.join(", ")}<br>`;
+      });
+    });
+    defs.innerHTML = out;
+  } catch(e){
+    errorBox.textContent = e.message.includes("Failed to fetch") ?
+      "No network connection." : e.message;
+  }
+}
+</script>
+</body>
+</html>
